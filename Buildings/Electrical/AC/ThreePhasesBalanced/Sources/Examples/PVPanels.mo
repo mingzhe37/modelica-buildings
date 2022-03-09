@@ -1,10 +1,10 @@
 within Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Examples;
 model PVPanels "This example illustrates how to use PV panel models"
   extends Modelica.Icons.Example;
-  parameter Modelica.Units.SI.Area A = 10;
+  parameter Modelica.Units.SI.Area A = 20;
   parameter Modelica.Units.SI.Voltage V_nominal = 480;
-  parameter Modelica.Units.SI.Angle til = 0.34906585039887;
-  parameter Modelica.Units.SI.Angle azi = -0.78539816339745;
+  parameter Modelica.Units.SI.Angle til = 0.523599;
+  parameter Modelica.Units.SI.Angle azi = -0.610865;
 
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive RL(
     mode=Types.Load.VariableZ_y_input,
