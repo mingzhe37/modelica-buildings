@@ -1,6 +1,11 @@
 within Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Examples;
 model PVPanels "This example illustrates how to use PV panel models"
   extends Modelica.Icons.Example;
+  parameter Modelica.Units.SI.Area A = 10;
+  parameter Modelica.Units.SI.Voltage V_nominal = 480;
+  parameter Modelica.Units.SI.Angle til = 0.34906585039887;
+  parameter Modelica.Units.SI.Angle azi = -0.78539816339745;
+
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive RL(
     mode=Types.Load.VariableZ_y_input,
     P_nominal=-2000,
@@ -29,10 +34,10 @@ model PVPanels "This example illustrates how to use PV panel models"
     "PV array simplified"
     annotation (Placement(transformation(extent={{40,0},{60,20}})));
   ThreePhasesBalanced.Sources.PVSimpleOriented pvOriented(
-    A=10,
-    V_nominal=480,
-    til=0.34906585039887,
-    azi=-0.78539816339745) "PV array oriented"
+    A=A,
+    V_nominal=V_nominal,
+    til=til,
+    azi=azi) "PV array oriented"
     annotation (Placement(transformation(extent={{-10,0},{10,20}})));
 equation
   connect(grid.terminal, RL.terminal)
