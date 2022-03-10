@@ -1,7 +1,11 @@
 within Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Examples;
 model ACLine "Test model for single phase lines that use commercial cables"
   extends Modelica.Icons.Example;
-  replaceable parameter Buildings.Electrical.Transmission.LowVoltageCables.Cu50 perLin;
+  replaceable parameter Buildings.Electrical.Transmission.LowVoltageCables.Cu95 perLin;
+  parameter Modelica.Units.SI.Length l=2000;
+  parameter Modelica.Units.SI.Power P_nominal=7000;
+  parameter Modelica.Units.SI.Voltage V_nominal=480;
+
   ThreePhasesBalanced.Sources.FixedVoltage E(definiteReference=true,
     f=60,
     V=480) "Voltage source"
@@ -9,50 +13,50 @@ model ACLine "Test model for single phase lines that use commercial cables"
   ThreePhasesBalanced.Loads.Impedance R1(R=10) "Resistive load 1"
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
   ThreePhasesBalanced.Lines.Line line_1(
-    P_nominal=5000,
-    l=2000,
+    P_nominal=P_nominal,
+    l=l,
     mode=Types.CableMode.commercial,
     commercialCable=perLin,
-    V_nominal=480) "Resistive line that connects to load 1"
+    V_nominal=V_nominal) "Resistive line that connects to load 1"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   ThreePhasesBalanced.Lines.Line line_2a(
-    P_nominal=5000,
+    P_nominal=P_nominal,
     mode=Types.CableMode.commercial,
     commercialCable=perLin,
-    l=1000,
-    V_nominal=480) "Resistive line that connects to load 2"
+    l=l,
+    V_nominal=V_nominal) "Resistive line that connects to load 2"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
   ThreePhasesBalanced.Loads.Impedance R2(R=10) "Resistive load 2"
     annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
   ThreePhasesBalanced.Lines.Line line_2b(
-    P_nominal=5000,
+    P_nominal=P_nominal,
     mode=Types.CableMode.commercial,
     commercialCable=perLin,
-    l=1000,
-    V_nominal=480) "Resistive line that connects to load 2"
+    l=l,
+    V_nominal=V_nominal) "Resistive line that connects to load 2"
     annotation (Placement(transformation(extent={{-32,-30},{-12,-10}})));
   ThreePhasesBalanced.Lines.Line line_3a(
-    P_nominal=5000,
+    P_nominal=P_nominal,
     mode=Types.CableMode.commercial,
     commercialCable=perLin,
-    l=4000,
-    V_nominal=480) "Resistive line that connects to load 3"
+    l=l,
+    V_nominal=V_nominal) "Resistive line that connects to load 3"
     annotation (Placement(transformation(extent={{-60,-50},{-40,-30}})));
   ThreePhasesBalanced.Lines.Line line_3b(
-    P_nominal=5000,
+    P_nominal=P_nominal,
     mode=Types.CableMode.commercial,
     commercialCable=perLin,
-    l=4000,
-    V_nominal=480) "Resistive line that connects to load 3"
+    l=l,
+    V_nominal=V_nominal) "Resistive line that connects to load 3"
     annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
   ThreePhasesBalanced.Loads.Impedance R3(R=10) "Resistive load 3"
     annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
   ThreePhasesBalanced.Lines.Line line_sc(
-    P_nominal=5000,
-    l=2000,
+    P_nominal=P_nominal,
+    l=l,
     mode=Types.CableMode.commercial,
     commercialCable=perLin,
-    V_nominal=480) "Line that connects the source and the short circuit"
+    V_nominal=V_nominal) "Line that connects the source and the short circuit"
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
   ThreePhasesBalanced.Loads.Impedance load_sc(R=0) "Short circuit"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
