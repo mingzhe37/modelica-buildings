@@ -2,12 +2,9 @@ within Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Examples;
 model WindTurbine "Example for the WindTurbine AC model"
   extends Modelica.Icons.Example;
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.WindTurbine tur(
-    table=[3.5, 0;
-           5.5,   100;
-           12, 900;
-           14, 1000;
-           25, 1000], h=10,
-    scale=10,
+    table=[3.5,0; 5.5,200; 12,1100; 14,1500; 25,1500],
+    h=15,
+    scale=15,
     V_nominal=480) "Wind turbine"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
