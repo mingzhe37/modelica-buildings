@@ -1,6 +1,7 @@
 within Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Examples;
 model ACLine "Test model for single phase lines that use commercial cables"
   extends Modelica.Icons.Example;
+  replaceable parameter Buildings.Electrical.Transmission.LowVoltageCables.Cu50 perLin;
   ThreePhasesBalanced.Sources.FixedVoltage E(definiteReference=true,
     f=60,
     V=480) "Voltage source"
@@ -11,13 +12,13 @@ model ACLine "Test model for single phase lines that use commercial cables"
     P_nominal=5000,
     l=2000,
     mode=Types.CableMode.commercial,
-    commercialCable=Transmission.LowVoltageCables.Cu50(),
+    commercialCable=perLin,
     V_nominal=480) "Resistive line that connects to load 1"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   ThreePhasesBalanced.Lines.Line line_2a(
     P_nominal=5000,
     mode=Types.CableMode.commercial,
-    commercialCable=Transmission.LowVoltageCables.Cu50(),
+    commercialCable=perLin,
     l=1000,
     V_nominal=480) "Resistive line that connects to load 2"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
@@ -26,21 +27,21 @@ model ACLine "Test model for single phase lines that use commercial cables"
   ThreePhasesBalanced.Lines.Line line_2b(
     P_nominal=5000,
     mode=Types.CableMode.commercial,
-    commercialCable=Transmission.LowVoltageCables.Cu50(),
+    commercialCable=perLin,
     l=1000,
     V_nominal=480) "Resistive line that connects to load 2"
     annotation (Placement(transformation(extent={{-32,-30},{-12,-10}})));
   ThreePhasesBalanced.Lines.Line line_3a(
     P_nominal=5000,
     mode=Types.CableMode.commercial,
-    commercialCable=Transmission.LowVoltageCables.Cu50(),
+    commercialCable=perLin,
     l=4000,
     V_nominal=480) "Resistive line that connects to load 3"
     annotation (Placement(transformation(extent={{-60,-50},{-40,-30}})));
   ThreePhasesBalanced.Lines.Line line_3b(
     P_nominal=5000,
     mode=Types.CableMode.commercial,
-    commercialCable=Transmission.LowVoltageCables.Cu50(),
+    commercialCable=perLin,
     l=4000,
     V_nominal=480) "Resistive line that connects to load 3"
     annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
@@ -50,7 +51,7 @@ model ACLine "Test model for single phase lines that use commercial cables"
     P_nominal=5000,
     l=2000,
     mode=Types.CableMode.commercial,
-    commercialCable=Transmission.LowVoltageCables.Cu50(),
+    commercialCable=perLin,
     V_nominal=480) "Line that connects the source and the short circuit"
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
   ThreePhasesBalanced.Loads.Impedance load_sc(R=0) "Short circuit"
