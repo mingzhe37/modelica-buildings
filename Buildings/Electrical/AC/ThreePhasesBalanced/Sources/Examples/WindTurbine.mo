@@ -1,11 +1,18 @@
 within Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Examples;
 model WindTurbine "Example for the WindTurbine AC model"
   extends Modelica.Icons.Example;
+  parameter Real scale=15 "Scale factor";
+  parameter Modelica.Units.SI.Length h=15 "Height over ground";
+  parameter Modelica.Units.SI.Voltage V_nominal=480 "Nominal voltage";
+  parameter Real table[:,2]=
+          [3.5, 0; 5.5, 200; 12, 1100; 14, 1500; 25, 1500]
+    "Table of generated power (first column is wind speed, second column is power)";
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.WindTurbine tur(
-    table=[3.5,0; 5.5,200; 12,1100; 14,1500; 25,1500],
-    h=15,
-    scale=15,
-    V_nominal=480) "Wind turbine"
+    table=table,
+    h=h,
+    scale=scale,
+    V_nominal=V_nominal)
+                   "Wind turbine"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         origin={60,0})));
@@ -18,12 +25,12 @@ model WindTurbine "Example for the WindTurbine AC model"
     annotation (Placement(transformation(extent={{16,36},{36,56}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Resistive res(
     P_nominal=-500,
-    V_nominal=480)
+    V_nominal=V_nominal)
     "Resistive line"
     annotation (Placement(transformation(extent={{-22,-30},{-2,-10}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Grid sou(
     f=60,
-    V=480)
+    V=V_nominal)
     "Voltage source"
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.TwoPortResistance lin(
