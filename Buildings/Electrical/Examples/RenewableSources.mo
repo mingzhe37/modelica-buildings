@@ -15,7 +15,7 @@ model RenewableSources
   parameter Modelica.Units.SI.Angle azi = 0;
 
   //distribution line parameters
-  replaceable parameter Buildings.Electrical.Transmission.LowVoltageCables.Cu95 perLin;
+  replaceable parameter Buildings.Electrical.Transmission.LowVoltageCables.Cu20 perLin;
   parameter Modelica.Units.SI.Length l=300;
   parameter Modelica.Units.SI.Power P_nominal=7000;
 
@@ -68,25 +68,33 @@ model RenewableSources
     V_nominal=V_nominal,
     P_nominal=7*P_nominal + scale)            "Electrical line"
               annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
-  AC.ThreePhasesBalanced.Lines.Line line2(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line2(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=3*P_nominal)             "Electrical line"
+    P_nominal=3*P_nominal,
+    commercialCable=perLin)            "Electrical line"
              annotation (Placement(transformation(extent={{-20,10},{0,30}})));
-  AC.ThreePhasesBalanced.Lines.Line line3(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line3(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=2*P_nominal)             "Electrical line"
+    P_nominal=2*P_nominal,
+    commercialCable=perLin)            "Electrical line"
              annotation (Placement(transformation(extent={{20,10},{40,30}})));
-  AC.ThreePhasesBalanced.Lines.Line line4(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line4(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=P_nominal)             "Electrical line"
+    P_nominal=P_nominal,
+    commercialCable=perLin)          "Electrical line"
              annotation (Placement(transformation(extent={{60,10},{80,30}})));
-  AC.ThreePhasesBalanced.Lines.Line line5(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line5(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=3*P_nominal + scale)            "Electrical line"
+    P_nominal=3*P_nominal + scale,
+    commercialCable=perLin)                   "Electrical line"
     annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
   AC.ThreePhasesBalanced.Loads.Inductive loa5(mode=Buildings.Electrical.Types.Load.VariableZ_y_input,
     V_nominal=V_nominal,
@@ -109,15 +117,19 @@ model RenewableSources
     pf=0.75,
     P_nominal=-PLoa_nominal) "Electrical load"
     annotation (Placement(transformation(extent={{60,-50},{80,-30}})));
-  AC.ThreePhasesBalanced.Lines.Line line6(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line6(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=2*P_nominal + scale)            "Electrical line"
+    P_nominal=2*P_nominal + scale,
+    commercialCable=perLin)                   "Electrical line"
              annotation (Placement(transformation(extent={{0,-20},{20,0}})));
-  AC.ThreePhasesBalanced.Lines.Line line7(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line7(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=P_nominal + scale)            "Electrical line"
+    P_nominal=P_nominal + scale,
+    commercialCable=perLin)                 "Electrical line"
              annotation (Placement(transformation(extent={{40,-20},{60,0}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv1(
     eta_DCAC=0.89,
@@ -208,10 +220,12 @@ model RenewableSources
     scale=scale)
                 "Wind turbine model"
     annotation (Placement(transformation(extent={{120,-20},{140,0}})));
-  AC.ThreePhasesBalanced.Lines.Line line8(mode=Buildings.Electrical.Types.CableMode.automatic,
+  AC.ThreePhasesBalanced.Lines.Line line8(
+    mode=Buildings.Electrical.Types.CableMode.commercial,
     l=l,
     V_nominal=V_nominal,
-    P_nominal=scale)
+    P_nominal=scale,
+    commercialCable=perLin)
              annotation (Placement(transformation(extent={{80,-20},{100,0}})));
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
       computeWetBulbTemperature=false,
