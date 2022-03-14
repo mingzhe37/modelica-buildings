@@ -2,19 +2,33 @@ within Buildings.Electrical.Examples;
 model RenewableSources
   "Example model that shows the impact of renewable sources on the electrical grid"
   extends Modelica.Icons.Example;
+  //wind turbine parameters
+  parameter Real scale=14000 "Scale factor";
+  parameter Modelica.Units.SI.Length h=15 "Height over ground";
+  parameter Real table[:,2]=
+          [3.5, 0; 5.5, 0.1; 12, 0.9; 14, 1; 25, 1]
+    "Table of generated power (first column is wind speed, second column is power)";
+
+  //PV panel parameters
+  parameter Modelica.Units.SI.Area A = 38;
+  parameter Modelica.Units.SI.Angle til = 0.5235987755983;
+  parameter Modelica.Units.SI.Angle azi = 0;
+
+  //distribution line parameters
+  replaceable parameter Buildings.Electrical.Transmission.LowVoltageCables.Cu95 perLin;
+  parameter Modelica.Units.SI.Length l=300;
+  parameter Modelica.Units.SI.Power P_nominal=7000;
+
+  //grid and load parameters
   parameter Modelica.Units.SI.Frequency f=60 "Nominal grid frequency";
   parameter Modelica.Units.SI.Voltage V_nominal=480 "Nominal grid voltage";
   parameter Modelica.Units.SI.Power PLoa_nominal=3500 "Nominal power of a load";
-  parameter Modelica.Units.SI.Power PWin=PLoa_nominal*4
-    "Nominal power of the wind turbine";
-  parameter Modelica.Units.SI.Power PSun=PLoa_nominal*1.0
-    "Nominal power of the PV";
-  parameter Modelica.Units.SI.DensityOfHeatFlowRate W_m2_nominal=1000
-    "Nominal solar power per unit area";
-  parameter Real eff_PV = 0.12*0.85*0.9
-    "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
-  parameter Modelica.Units.SI.Area A_PV=PSun/eff_PV/W_m2_nominal
-    "Nominal area of a P installation";
+
+  //parameter Modelica.Units.SI.Power PWin=PLoa_nominal*4 "Nominal power of the wind turbine";
+  //parameter Modelica.Units.SI.Power PSun=PLoa_nominal*1.0 "Nominal power of the PV";
+  //parameter Modelica.Units.SI.DensityOfHeatFlowRate W_m2_nominal=1000 "Nominal solar power per unit area";
+  //parameter Real eff_PV = 0.12*0.85*0.9 "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
+  //parameter Modelica.Units.SI.Area A_PV=38 "Nominal area of a P installation";
 
   AC.ThreePhasesBalanced.Sources.Grid gri(
     f=f,
@@ -50,29 +64,29 @@ model RenewableSources
     P_nominal=-PLoa_nominal) "Electrical load"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
   AC.ThreePhasesBalanced.Lines.Line line1(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=1500,
+    l=5*l,
     V_nominal=V_nominal,
-    P_nominal=7*(PLoa_nominal + PSun) + PWin) "Electrical line"
+    P_nominal=7*P_nominal + scale)            "Electrical line"
               annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
   AC.ThreePhasesBalanced.Lines.Line line2(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=3*(PLoa_nominal + PSun)) "Electrical line"
+    P_nominal=3*P_nominal)             "Electrical line"
              annotation (Placement(transformation(extent={{-20,10},{0,30}})));
   AC.ThreePhasesBalanced.Lines.Line line3(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=2*(PLoa_nominal + PSun)) "Electrical line"
+    P_nominal=2*P_nominal)             "Electrical line"
              annotation (Placement(transformation(extent={{20,10},{40,30}})));
   AC.ThreePhasesBalanced.Lines.Line line4(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=(PLoa_nominal + PSun)) "Electrical line"
+    P_nominal=P_nominal)             "Electrical line"
              annotation (Placement(transformation(extent={{60,10},{80,30}})));
   AC.ThreePhasesBalanced.Lines.Line line5(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=3*(PLoa_nominal + PSun) + PWin) "Electrical line"
+    P_nominal=3*P_nominal + scale)            "Electrical line"
     annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
   AC.ThreePhasesBalanced.Loads.Inductive loa5(mode=Buildings.Electrical.Types.Load.VariableZ_y_input,
     V_nominal=V_nominal,
@@ -96,106 +110,108 @@ model RenewableSources
     P_nominal=-PLoa_nominal) "Electrical load"
     annotation (Placement(transformation(extent={{60,-50},{80,-30}})));
   AC.ThreePhasesBalanced.Lines.Line line6(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=2*(PLoa_nominal + PSun) + PWin) "Electrical line"
+    P_nominal=2*P_nominal + scale)            "Electrical line"
              annotation (Placement(transformation(extent={{0,-20},{20,0}})));
   AC.ThreePhasesBalanced.Lines.Line line7(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=(PLoa_nominal + PSun) + PWin) "Electrical line"
+    P_nominal=P_nominal + scale)            "Electrical line"
              annotation (Placement(transformation(extent={{40,-20},{60,0}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv1(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.85,
-    azi=Buildings.Types.Azimuth.S,
-    til=0.5235987755983) "PV"
+    azi=azi,
+    til=til)             "PV"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv2(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.8,
-    azi=Buildings.Types.Azimuth.E,
-    til=0.5235987755983) "PV"
+    azi=azi - Modelica.Constants.pi/2,
+    til=til)             "PV"
     annotation (Placement(transformation(extent={{0,60},{20,80}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv3(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.8,
-    azi=Buildings.Types.Azimuth.W,
-    til=0.34906585039887) "PV"
+    azi=azi + Modelica.Constants.pi/2,
+    til=til)              "PV"
     annotation (Placement(transformation(extent={{40,60},{60,80}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv4(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.9,
-    azi=Buildings.Types.Azimuth.S,
-    til=0.5235987755983) "PV"
+    azi=azi,
+    til=til)             "PV"
     annotation (Placement(transformation(extent={{80,60},{100,80}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv5(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.95,
-    azi=Buildings.Types.Azimuth.W,
-    til=0.61086523819802) "PV"
+    azi=azi - Modelica.Constants.pi/2,
+    til=til)              "PV"
     annotation (Placement(transformation(extent={{-20,-80},{0,-60}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv6(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.9,
-    azi=Buildings.Types.Azimuth.E,
-    til=0.43633231299858) "PV"
+    azi=azi + Modelica.Constants.pi/2,
+    til=til)              "PV"
     annotation (Placement(transformation(extent={{20,-80},{40,-60}})));
   AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv7(
     eta_DCAC=0.89,
-    A=A_PV,
+    A=A,
     fAct=0.9,
     eta=0.12,
     linearized=false,
     V_nominal=V_nominal,
     pf=0.97,
-    azi=Buildings.Types.Azimuth.S,
-    til=0.5235987755983) "PV"
+    azi=azi,
+    til=til)             "PV"
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
   AC.ThreePhasesBalanced.Sources.WindTurbine winTur(
+    table=table,
     V_nominal=V_nominal,
-    h=15,
+    h=h,
     hRef=10,
     pf=0.94,
     eta_DCAC=0.92,
     nWin=0.4,
     tableOnFile=false,
-    scale=PWin) "Wind turbine model"
+    scale=scale)
+                "Wind turbine model"
     annotation (Placement(transformation(extent={{120,-20},{140,0}})));
   AC.ThreePhasesBalanced.Lines.Line line8(mode=Buildings.Electrical.Types.CableMode.automatic,
-      l=300,
+    l=l,
     V_nominal=V_nominal,
-    P_nominal=PWin)
+    P_nominal=scale)
              annotation (Placement(transformation(extent={{80,-20},{100,0}})));
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
       computeWetBulbTemperature=false,
@@ -472,17 +488,17 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
   connect(pv1.P, PSol.u[1]) annotation (Line(
-      points={{-19,77},{-12,77},{-12,92},{160,92},{160,73.6},{174,73.6}},
+      points={{-19,77},{-12,77},{-12,92},{160,92},{160,68.2},{174,68.2}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
   connect(PSol.u[2], pv2.P) annotation (Line(
-      points={{174,72.4},{160,72.4},{160,92},{30,92},{30,77},{21,77}},
+      points={{174,68.8},{160,68.8},{160,92},{30,92},{30,77},{21,77}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
   connect(PSol.u[3], pv3.P) annotation (Line(
-      points={{174,71.2},{160,71.2},{160,92},{70,92},{70,77},{61,77}},
+      points={{174,69.4},{160,69.4},{160,92},{70,92},{70,77},{61,77}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
@@ -492,7 +508,7 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
   connect(PSol.u[5], pv5.P) annotation (Line(
-      points={{174,68.8},{160,68.8},{160,-90},{10,-90},{10,-63},{1,-63}},
+      points={{174,70.6},{160,70.6},{160,-90},{10,-90},{10,-63},{1,-63}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
@@ -502,13 +518,13 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
   connect(PSol.u[6], pv6.P) annotation (Line(
-      points={{174,67.6},{168,67.6},{168,72},{160,72},{160,-90},{50,-90},{50,-63},
+      points={{174,71.2},{168,71.2},{168,72},{160,72},{160,-90},{50,-90},{50,-63},
           {41,-63}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dot));
   connect(PSol.u[7], pv7.P) annotation (Line(
-      points={{174,66.4},{168,66.4},{168,68},{160,68},{160,-90},{90,-90},{90,-63},
+      points={{174,71.8},{168,71.8},{168,68},{160,68},{160,-90},{90,-90},{90,-63},
           {81,-63}},
       color={0,0,127},
       smooth=Smooth.None,
